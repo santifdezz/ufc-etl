@@ -1,33 +1,26 @@
-# main.py
-from scrapers.fighters_details import scrape_all_fighters
-from scrapers.events_details import scrape_events
-from scrapers.fighter_details import update_fighters_details
-from scrapers.event_fights import parse_all_event_details
-from scrapers.fight_details import extract_event_fights_details
+"""Main entry point for UFC scraper."""
+import argparse
+from src.pipeline.orchestrator import UFCScrapingOrchestrator
 
-from config import EVENT_URL, DATA_DIR
 
-def main(dev_mode=None, dev_limit=None):
-    print("🚀 Iniciando scraping de UFC Stats...")
-    print("Modo desarrollo:", dev_mode, "Límite:", dev_limit)
+def main():
+    """Main function."""
+    parser = argparse.ArgumentParser(description='UFC Stats Scraper')
+    parser.add_argument('--dev', action='store_true', 
+                       help='Run in development mode with limited records')
+    parser.add_argument('--limit', type=int, default=20,
+                       help='Limit number of records in dev mode')
     
-    print("Fase 1: Scraping de luchadores")
-    scrape_all_fighters(dev_mode=dev_mode, dev_limit=dev_limit)
+    args = parser.parse_args()
     
-    print("Fase 2: Scraping de eventos")
-    scrape_events(dev_mode=dev_mode, dev_limit=dev_limit)
+    # Initialize and run orchestrator
+    orchestrator = UFCScrapingOrchestrator(
+        dev_mode=args.dev,
+        dev_limit=args.limit
+    )
     
-    print("Fase 3: Scraping de detalles de los luchadores")
-    update_fighters_details(dev_mode=dev_mode, dev_limit=dev_limit)
-    
-    print("Fase 4: Scraping de peleas y detalles de los eventos")
-    parse_all_event_details(max_workers=5,dev_mode=dev_mode,dev_limit=dev_limit)
-    
-    print("Fase 5: Scraping de detalles de las peleas")
-    extract_event_fights_details(max_workers=5,dev_mode=dev_mode,dev_limit=dev_limit)
-    
-    
-    print("\n✅ Scraping completado!")
+    orchestrator.run_full_pipeline()
+
 
 if __name__ == "__main__":
     main()
