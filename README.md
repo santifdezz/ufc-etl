@@ -21,6 +21,11 @@ Proyecto profesional para la extracción, limpieza y análisis de datos de pelea
 ## Descripción General
 Este proyecto permite extraer, limpiar y analizar datos históricos de la UFC de manera eficiente y reproducible. El pipeline automatiza la descarga, validación, transformación y exportación de datos listos para análisis y modelado predictivo.
 
+Datos listos para usar desde el repositorio de kaggle:
+
+[Kaggle](https://www.kaggle.com/datasets/santifdezseo/ufc-data-stats)
+
+
 ## Características Principales
 - **Arquitectura modular**: Separación clara de scraping, modelos, utilidades y orquestación.
 - **Procesamiento concurrente**: Extracción rápida y eficiente de grandes volúmenes de datos.
