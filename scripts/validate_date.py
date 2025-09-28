@@ -1,4 +1,7 @@
-"""Data validation script."""
+"""
+Script para validación de datos en el pipeline UFC ETL.
+Permite validar la integridad de los datos extraídos de luchadores, eventos y peleas, mostrando estadísticas de éxito.
+"""
 import sys
 import os
 import csv
@@ -9,7 +12,10 @@ from src.core.config import Config
 from src.utils.validation import DataValidator
 
 def main():
-    """Validate scraped data."""
+    """
+    Ejecuta la validación de los datos extraídos.
+    Valida los archivos de luchadores, eventos y peleas, mostrando el porcentaje de registros válidos.
+    """
     config = Config()
     validator = DataValidator()
     

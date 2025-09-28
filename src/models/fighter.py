@@ -1,11 +1,17 @@
-"""Fighter data models."""
+"""
+Modelo de datos para luchadores (Fighter) en el pipeline UFC ETL.
+Define los atributos principales y detallados de un luchador, permitiendo su serialización y deserialización.
+"""
 from dataclasses import dataclass
 from typing import Optional
 
 
 @dataclass
 class Fighter:
-    """Fighter data model."""
+    """
+    Modelo de datos para un luchador.
+    Incluye información básica y estadísticas detalladas, facilitando el manejo estructurado de los datos de luchadores.
+    """
     fighter_id: str
     first: Optional[str] = None
     last: Optional[str] = None
@@ -15,8 +21,8 @@ class Fighter:
     reach: Optional[str] = None
     stance: Optional[str] = None
     wins: Optional[str] = None
-    losses: Optional[str] = None
     defeats: Optional[str] = None
+    draws: Optional[str] = None
     belt: Optional[bool] = None
     
     # Detailed stats
@@ -31,10 +37,20 @@ class Fighter:
     sub_avg: Optional[str] = None
     
     def to_dict(self) -> dict:
-        """Convert to dictionary."""
+        """
+        Convierte la instancia del luchador a un diccionario, excluyendo los atributos con valor None.
+        Returns:
+            dict: Representación en diccionario del luchador.
+        """
         return {k: v for k, v in self.__dict__.items() if v is not None}
     
     @classmethod
     def from_dict(cls, data: dict) -> 'Fighter':
-        """Create from dictionary."""
+        """
+        Crea una instancia de Fighter a partir de un diccionario, utilizando solo las claves válidas.
+        Args:
+            data (dict): Diccionario con los datos del luchador.
+        Returns:
+            Fighter: Instancia creada a partir del diccionario.
+        """
         return cls(**{k: v for k, v in data.items() if hasattr(cls, k)})

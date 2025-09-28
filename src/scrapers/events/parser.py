@@ -1,4 +1,7 @@
-"""Event parser implementation."""
+"""
+Implementación del parser de eventos (Event) para el pipeline UFC ETL.
+Extrae y estructura información de eventos a partir de HTML, utilizando BeautifulSoup y utilidades propias.
+"""
 from bs4 import BeautifulSoup
 from typing import Dict, Any, List
 from ..base.parser import BaseParser
@@ -6,10 +9,20 @@ from ...utils.http import extract_id_from_url, clean_text
 
 
 class EventParser(BaseParser):
-    """Parser for event data."""
+    """
+    Parser especializado para datos de eventos.
+    Proporciona métodos para extraer información de eventos desde tablas HTML.
+    """
     
     def parse_events_table(self, soup: BeautifulSoup, event_type: str) -> List[Dict[str, Any]]:
-        """Parse events table from soup."""
+        """
+        Extrae la tabla de eventos desde el HTML y la convierte en una lista de diccionarios.
+        Args:
+            soup (BeautifulSoup): Objeto BeautifulSoup de la página de eventos.
+            event_type (str): Tipo de evento (completado o próximo).
+        Returns:
+            List[Dict[str, Any]]: Lista de diccionarios con los datos de cada evento.
+        """
         events = []
         events_table = soup.find('table', class_='b-statistics__table-events')
         
@@ -29,7 +42,14 @@ class EventParser(BaseParser):
         return events
     
     def _extract_event_data(self, event_row: BeautifulSoup, event_type: str) -> Dict[str, Any]:
-        """Extract data from a single event row."""
+        """
+        Extrae los datos de un evento individual a partir de una fila de la tabla.
+        Args:
+            event_row (BeautifulSoup): Fila de la tabla de eventos.
+            event_type (str): Tipo de evento.
+        Returns:
+            Dict[str, Any]: Diccionario con los datos del evento, o None si hay error.
+        """
         try:
             cells = event_row.find_all('td')
             if len(cells) < 2:
@@ -59,8 +79,7 @@ class EventParser(BaseParser):
                 'event_id': event_id,
                 'name': name,
                 'date': date,
-                'location': location,
-                'status': event_type
+                'location': location
             }
             
         except Exception as e:

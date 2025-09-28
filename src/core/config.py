@@ -1,4 +1,7 @@
-"""Configuration management for UFC scraper."""
+"""
+Gestión de configuración para el scraper de UFC.
+Define parámetros de scraping y rutas de datos, asegurando la correcta inicialización de directorios y opciones.
+"""
 import os
 from dataclasses import dataclass
 from typing import Optional
@@ -6,13 +9,16 @@ from typing import Optional
 
 @dataclass
 class ScrapingConfig:
-    """Configuration for scraping parameters."""
+    """
+    Configuración de parámetros para el scraping de datos.
+    Permite ajustar concurrencia, retardos, modo desarrollo y cabeceras HTTP.
+    """
     max_workers: int = 5
     delay_seconds: float = 3.0
     dev_mode: bool = False
     dev_limit: int = 20
     headers: dict = None
-    
+
     def __post_init__(self):
         if self.headers is None:
             self.headers = {
@@ -22,34 +28,42 @@ class ScrapingConfig:
 
 @dataclass
 class DataConfig:
-    """Configuration for data paths."""
+    """
+    Configuración de rutas para los datos utilizados y generados por el pipeline.
+    Incluye rutas para datos crudos y de pruebas.
+    """
     base_dir: str = 'data'
     test_dir: str = 'data/tests'
-    
+
     @property
     def fighters_path(self) -> str:
+        """Ruta al archivo CSV de luchadores crudos."""
         return os.path.join(self.base_dir, 'raw','raw_fighters.csv')
-    
+
     @property
     def events_path(self) -> str:
+        """Ruta al archivo CSV de eventos crudos."""
         return os.path.join(self.base_dir, 'raw','raw_events.csv')
 
     @property
     def fights_path(self) -> str:
+        """Ruta al archivo CSV de peleas crudas."""
         return os.path.join(self.base_dir, 'raw','raw_fights.csv')
 
 
 class Config:
-    """Main configuration class."""
-    
+    """
+    Clase principal de configuración del sistema.
+    Inicializa y agrupa la configuración de scraping y de rutas de datos.
+    Garantiza la existencia de los directorios necesarios para la operación del pipeline.
+    """
     def __init__(self, dev_mode: Optional[bool] = None, dev_limit: Optional[int] = None):
         self.scraping = ScrapingConfig(
             dev_mode=dev_mode or False,
             dev_limit=dev_limit or 20
         )
         self.data = DataConfig()
-        
-        # Ensure directories exist
+        # Asegura que los directorios requeridos existan
         os.makedirs(self.data.base_dir, exist_ok=True)
         os.makedirs(os.path.join(self.data.base_dir, 'raw'), exist_ok=True)
         os.makedirs(self.data.test_dir, exist_ok=True)

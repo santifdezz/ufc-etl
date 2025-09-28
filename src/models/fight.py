@@ -1,20 +1,26 @@
-"""Fight data models."""
+"""
+Modelo de datos para peleas (Fight) en el pipeline UFC ETL.
+Incluye atributos de identificación, detalles, estadísticas y métodos de serialización/deserialización.
+"""
 from dataclasses import dataclass
 from typing import Optional
 
 
 @dataclass
 class Fight:
-    """Fight data model."""
+    """
+    Modelo de datos para una pelea.
+    Incluye información básica, detalles y estadísticas de la pelea, permitiendo su manejo estructurado.
+    """
     event_id: str
     fight_id: str
     fight_order: Optional[int] = None
     
     # Fighters
-    fighter1_id: Optional[str] = None
-    fighter1_name: Optional[str] = None
-    fighter2_id: Optional[str] = None
-    fighter2_name: Optional[str] = None
+    red_id: Optional[str] = None
+    red_name: Optional[str] = None
+    blue_id: Optional[str] = None
+    blue_name: Optional[str] = None
     winner_id: Optional[str] = None
     
     # Fight details
@@ -25,7 +31,7 @@ class Fight:
     time_format: Optional[str] = None
     method: Optional[str] = None
     details: Optional[str] = None
-    bonus: Optional[str] = None
+    bonus: Optional[list[str]] = None
     
     # Statistics
     kd1: str = '0'
@@ -54,10 +60,20 @@ class Fight:
     rev2: Optional[str] = None
     
     def to_dict(self) -> dict:
-        """Convert to dictionary."""
+        """
+        Convierte la instancia de la pelea a un diccionario, incluyendo todos los atributos.
+        Returns:
+            dict: Representación en diccionario de la pelea.
+        """
         return self.__dict__
     
     @classmethod
     def from_dict(cls, data: dict) -> 'Fight':
-        """Create from dictionary."""
+        """
+        Crea una instancia de Fight a partir de un diccionario, utilizando solo las claves válidas.
+        Args:
+            data (dict): Diccionario con los datos de la pelea.
+        Returns:
+            Fight: Instancia creada a partir del diccionario.
+        """
         return cls(**{k: v for k, v in data.items() if hasattr(cls, k)})

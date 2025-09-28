@@ -1,4 +1,7 @@
-"""Fighter parser implementation."""
+"""
+Implementación del parser de luchadores (Fighter) para el pipeline UFC ETL.
+Extrae y estructura información de luchadores y sus estadísticas a partir de HTML, utilizando BeautifulSoup y utilidades propias.
+"""
 import re
 from bs4 import BeautifulSoup
 from typing import Dict, Any, List
@@ -7,10 +10,19 @@ from ...utils.http import extract_id_from_url
 
 
 class FighterParser(BaseParser):
-    """Parser for fighter data."""
+    """
+    Parser especializado para datos de luchadores.
+    Proporciona métodos para extraer información básica y detallada de luchadores desde tablas y páginas HTML.
+    """
     
     def parse_fighters_table(self, soup: BeautifulSoup) -> List[Dict[str, Any]]:
-        """Parse fighters table from soup."""
+        """
+        Extrae la tabla de luchadores desde el HTML y la convierte en una lista de diccionarios.
+        Args:
+            soup (BeautifulSoup): Objeto BeautifulSoup de la página de luchadores.
+        Returns:
+            List[Dict[str, Any]]: Lista de diccionarios con los datos de cada luchador.
+        """
         fighters = []
         table = soup.find('table', class_='b-statistics__table')
         
@@ -20,7 +32,7 @@ class FighterParser(BaseParser):
         rows = table.find_all('tr', class_='b-statistics__table-row')
         field_names = [
             'first', 'last', 'nickname', 'height', 'weight', 
-            'reach', 'stance', 'wins', 'losses', 'defeats'
+            'reach', 'stance', 'wins', 'defeats', 'draws'
         ]
         
         for row in rows:
@@ -62,7 +74,13 @@ class FighterParser(BaseParser):
         return fighters
     
     def parse_fighter_details(self, html: str) -> Dict[str, Any]:
-        """Parse detailed fighter information from HTML."""
+        """
+        Extrae información detallada de un luchador a partir del HTML de su página de detalles.
+        Args:
+            html (str): HTML de la página de detalles del luchador.
+        Returns:
+            Dict[str, Any]: Diccionario con los campos detallados del luchador.
+        """
         soup = BeautifulSoup(html, 'html.parser')
         details = {}
         

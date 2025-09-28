@@ -1,100 +1,138 @@
-# UFC Stats Scraper
+# UFC ETL - Extracción y Procesamiento de Datos de la UFC
 
-Professional-grade scraper for UFC statistics data.
+Proyecto profesional para la extracción, limpieza y análisis de datos de peleas, luchadores y eventos de la UFC. Incluye scraping avanzado, validación, transformación y preparación de datasets para Machine Learning.
 
-## Features
+---
 
-- **Modular Architecture**: Clean separation of concerns
-- **Concurrent Processing**: Fast data extraction
-- **Development Mode**: Limited scraping for testing
-- **Data Validation**: Built-in data integrity checks
-- **Comprehensive Testing**: Unit and integration tests
-- **Professional Logging**: Structured error handling
+## Tabla de Contenidos
+- [Descripción General](#descripción-general)
+- [Características Principales](#características-principales)
+- [Instalación y Entorno](#instalación-y-entorno)
+- [Uso Rápido](#uso-rápido)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Pruebas](#pruebas)
+- [Salidas de Datos](#salidas-de-datos)
+- [Configuración](#configuración)
+- [Contribuciones](#contribuciones)
+- [Créditos y Licencia](#créditos-y-licencia)
 
-## Installation
-```bash
-    pip install -e .
-```
-### Creación y Activación del Entorno
-```bash
-# Crear el entorno desde el archivo
-conda env create -f environment.yml
+---
 
-# Activar el entorno
-conda activate ufc_scraper
+## Descripción General
+Este proyecto permite extraer, limpiar y analizar datos históricos de la UFC de manera eficiente y reproducible. El pipeline automatiza la descarga, validación, transformación y exportación de datos listos para análisis y modelado predictivo.
 
-# Actualizar el entorno si ya existe
-conda env update -f environment.yml --prune
+## Características Principales
+- **Arquitectura modular**: Separación clara de scraping, modelos, utilidades y orquestación.
+- **Procesamiento concurrente**: Extracción rápida y eficiente de grandes volúmenes de datos.
+- **Modo desarrollo**: Permite pruebas rápidas con límites configurables.
+- **Validación de datos**: Controles de integridad y calidad integrados.
+- **Cobertura de pruebas**: Tests unitarios y de integración con Pytest.
+- **Logging profesional**: Manejo estructurado de errores y logs.
+- **Preparación para ML**: Limpieza y exportación de datasets listos para modelos.
 
-```
-## Quick Start
+## Instalación y Entorno
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/santifdezz/ufc-etl.git
+   cd ufc-etl
+   ```
+2. Crea y activa el entorno Conda:
+   ```bash
+   conda env create -f environment.yml
+   conda activate ufc_scraper
+   # Para actualizar el entorno:
+   conda env update -f environment.yml --prune
+   ```
+3. Instala el paquete en modo editable:
+   ```bash
+   pip install -e .
+   ```
+
+## Uso Rápido
+### Desde Python
 ```python
-    pythonfrom src.pipeline.orchestrator import UFCScrapingOrchestrator
+from src.pipeline.orchestrator import UFCScrapingOrchestrator
 
-    # Run full pipeline
-    orchestrator = UFCScrapingOrchestrator()
-    orchestrator.run_full_pipeline()
+# Ejecutar el pipeline completo
+orchestrator = UFCScrapingOrchestrator()
+orchestrator.run_full_pipeline()
 
-    # Development mode
-    orchestrator = UFCScrapingOrchestrator(dev_mode=True, dev_limit=20)
-    orchestrator.run_full_pipeline()
+# Modo desarrollo (scraping limitado)
+orchestrator = UFCScrapingOrchestrator(dev_mode=True, dev_limit=20)
+orchestrator.run_full_pipeline()
 ```
-## Command Line
+### Desde la línea de comandos
 ```bash
-    # Full scraping
-    python main.py
+# Scraping completo
+python main.py
 
-    # Development mode
-    python main.py --dev --limit 50
+# Modo desarrollo
+python main.py --dev --limit 50
 
-    # Run development script
-    python scripts/run_dev.py
+# Ejecutar script de desarrollo
+python scripts/run_dev.py
 
-    # Validate data
-    python scripts/validate_data.py
+# Validar datos
+python scripts/validate_data.py
 ```
-## Architecture
-```bash
+
+## Estructura del Proyecto
+```text
 src/
-├── core/          # Configuration and exceptions
-├── scrapers/      # Scraping logic (fighters, events, fights)
-├── utils/         # Utilities (HTTP, data, concurrency)
-├── models/        # Data models
-└── pipeline/      # Orchestration logic
+├── core/          # Configuración y excepciones
+├── scrapers/      # Lógica de scraping (luchadores, eventos, peleas)
+├── utils/         # Utilidades (HTTP, datos, concurrencia)
+├── models/        # Modelos de datos
+└── pipeline/      # Orquestación del pipeline
+scripts/           # Scripts auxiliares y de validación
+notebooks/         # Análisis exploratorio y limpieza avanzada
+data/              # Datos brutos y procesados
+tests/             # Pruebas unitarias e integración
 ```
-## Testing
+
+## Pruebas
+Ejecuta la batería de tests con Pytest:
 ```bash
-    # Run all tests
-    pytest
+# Ejecutar todos los tests
+pytest
 
-    # Run unit tests only
-    pytest tests/unit/
+# Solo tests unitarios
+pytest tests/unit/
 
-    # Run with coverage
-    pytest --cov=src
+# Con reporte de cobertura
+pytest --cov=src
 
-    # Skip integration tests
-    pytest -m "not integration"
+# Omitir tests de integración
+pytest -m "not integration"
 ```
-# Data Output
-The scraper generates three main CSV files:
 
- - data/raw_fighters.csv: Fighter information and statistics
- - data/raw_events.csv: Event information
- - data/raw_fights.csv: Fight details and statistics
+## Salidas de Datos
+El pipeline genera los siguientes archivos principales:
 
-## Configuration
+- `data/raw/raw_fighters.csv`: Información y estadísticas de luchadores
+- `data/raw/raw_events.csv`: Información de eventos
+- `data/raw/raw_fights.csv`: Detalles y estadísticas de peleas
+- `data/processed/`: Archivos limpios y listos para análisis
+- `data/ml/`: Datasets finales para Machine Learning
 
-Edit src/core/config.py to modify:
+## Configuración
+Modifica los parámetros en `src/core/config.py` para ajustar:
+- Parámetros de scraping (número de workers, delays)
+- Rutas de datos
+- Opciones de modo desarrollo
 
- - Scraping parameters (workers, delays)
- - Data paths
- - Development mode settings
+## Contribuciones
+¡Las contribuciones son bienvenidas!
+1. Haz un fork del repositorio
+2. Crea una rama para tu feature o fix
+3. Añade pruebas para nuevas funcionalidades
+4. Ejecuta la batería de tests
+5. Envía un Pull Request con una descripción clara
 
-## Contributing
+## Créditos y Licencia
+- Autor: Santiago Fernández ([@santifdezz](https://github.com/santifdezz))
+- Licencia: MIT
+- Inspirado en proyectos de scraping y análisis de datos deportivos
 
- - Fork the repository
- - Create a feature branch
- - Add tests for new functionality
- - Run the test suite
- - Submit a pull request
+---
+Para dudas, sugerencias o reportes de bugs, abre un issue en GitHub.

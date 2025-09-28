@@ -1,4 +1,7 @@
-"""Integration tests for scrapers."""
+"""
+Pruebas de integración para los scrapers del pipeline UFC ETL.
+Evalúan la extracción de datos en modo desarrollo y la integridad de los resultados obtenidos.
+"""
 import pytest
 from src.core.config import Config
 from src.scrapers.fighters.scraper import FighterScraper
@@ -6,7 +9,9 @@ from src.scrapers.events.scraper import EventScraper
 
 
 class TestFighterScraper:
-    """Test fighter scraper integration."""
+    """
+    Pruebas de integración para el scraper de luchadores.
+    """
     
     def setup_method(self):
         self.config = Config(dev_mode=True, dev_limit=5)
@@ -14,7 +19,9 @@ class TestFighterScraper:
     
     @pytest.mark.integration
     def test_scrape_fighters_dev_mode(self):
-        """Test scraping fighters in dev mode."""
+        """
+        Prueba la extracción de luchadores en modo desarrollo y valida la estructura de los resultados.
+        """
         fighters = self.scraper.scrape()
         
         assert len(fighters) <= self.config.scraping.dev_limit
@@ -23,7 +30,9 @@ class TestFighterScraper:
 
 
 class TestEventScraper:
-    """Test event scraper integration."""
+    """
+    Pruebas de integración para el scraper de eventos.
+    """
     
     def setup_method(self):
         self.config = Config(dev_mode=True, dev_limit=5)
@@ -31,7 +40,9 @@ class TestEventScraper:
     
     @pytest.mark.integration
     def test_scrape_events_dev_mode(self):
-        """Test scraping events in dev mode."""
+        """
+        Prueba la extracción de eventos en modo desarrollo y valida la estructura de los resultados.
+        """
         events = self.scraper.scrape()
         
         assert len(events) <= self.config.scraping.dev_limit

@@ -1,4 +1,7 @@
-"""Fighter scraper implementation."""
+"""
+Implementación del scraper de luchadores (Fighter) para el pipeline UFC ETL.
+Incluye lógica para extraer información básica y detallada de luchadores, utilizando concurrencia y manejo de datos estructurados.
+"""
 from typing import List, Dict, Any
 from ..base.scraper import BaseScraper
 from .parser import FighterParser
@@ -7,14 +10,22 @@ from ...utils.concurrent import concurrent_map, concurrent_map_with_progress
 
 
 class FighterScraper(BaseScraper):
-    """Scraper for fighter data."""
+    """
+    Scraper especializado para la extracción de datos de luchadores.
+    Permite obtener información básica de todos los luchadores, procesando por letra y utilizando concurrencia.
+    """
     
     def __init__(self, config):
         super().__init__(config)
         self.parser = FighterParser()
     
     def scrape(self) -> List[Dict[str, Any]]:
-        """Scrape all fighters from all letters."""
+        """
+        Extrae todos los luchadores de todas las letras del alfabeto y los retorna como una lista de diccionarios.
+        Utiliza procesamiento concurrente para acelerar la extracción.
+        Returns:
+            List[Dict[str, Any]]: Lista de luchadores extraídos.
+        """
         print("🥊 Scraping fighters...")
         
         def scrape_letter(letter: str) -> List[Dict[str, Any]]:
@@ -39,7 +50,13 @@ class FighterScraper(BaseScraper):
         return all_fighters
     
     def _scrape_fighters_by_letter(self, letter: str) -> List[Dict[str, Any]]:
-        """Scrape fighters for a specific letter."""
+        """
+        Extrae luchadores para una letra específica del alfabeto.
+        Args:
+            letter (str): Letra a consultar.
+        Returns:
+            List[Dict[str, Any]]: Lista de luchadores extraídos para la letra dada.
+        """
         url = f"{FIGHTERS_URL}?char={letter}&page=all"
         soup = self.http_client.get_soup(url)
         
@@ -53,14 +70,24 @@ class FighterScraper(BaseScraper):
 
 
 class FighterDetailScraper(BaseScraper):
-    """Scraper for detailed fighter information."""
+    """
+    Scraper especializado en la extracción de información detallada de luchadores.
+    Utiliza concurrencia y muestra el progreso de la extracción.
+    """
     
     def __init__(self, config):
         super().__init__(config)
         self.parser = FighterParser()
     
     def scrape(self, fighters_data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Scrape detailed fighter information."""
+        """
+        Extrae información detallada de luchadores a partir de una lista de datos básicos.
+        Fusiona los detalles extraídos con los datos originales y muestra el progreso.
+        Args:
+            fighters_data (List[Dict[str, Any]]): Lista de diccionarios con datos básicos de luchadores.
+        Returns:
+            List[Dict[str, Any]]: Lista de luchadores con información detallada.
+        """
         print("📊 Scraping fighter details...")
         
         fighters_data = self._apply_dev_limit(fighters_data)
@@ -92,7 +119,13 @@ class FighterDetailScraper(BaseScraper):
         return updated_fighters
     
     def _scrape_single_fighter_details(self, fighter_id: str) -> Dict[str, Any]:
-        """Scrape details for a single fighter."""
+        """
+        Extrae los detalles de un solo luchador a partir de su identificador.
+        Args:
+            fighter_id (str): Identificador del luchador.
+        Returns:
+            Dict[str, Any]: Diccionario con los detalles extraídos del luchador.
+        """
         from ...core.constants import FIGHTER_URL
         
         url = f"{FIGHTER_URL}/{fighter_id}"

@@ -1,26 +1,42 @@
-"""Custom exceptions for UFC scraper."""
+"""
+Excepciones personalizadas para el scraper de UFC.
+Define una jerarquía de errores específicos para el proceso de scraping, parsing, validación y configuración.
+Permite un manejo más preciso y profesional de los errores en el pipeline ETL.
+"""
 
 
 class UFCScraperError(Exception):
-    """Base exception for UFC scraper."""
+    """
+    Excepción base para todos los errores del scraper de UFC.
+    Todas las excepciones personalizadas deben heredar de esta clase.
+    """
     pass
 
 
 class ScrapingError(UFCScraperError):
-    """Raised when scraping fails."""
+    """
+    Se lanza cuando ocurre un fallo durante el proceso de scraping de datos.
+    """
     pass
 
 
 class ParsingError(UFCScraperError):
-    """Raised when parsing fails."""
+    """
+    Se lanza cuando ocurre un error al parsear datos extraídos.
+    """
     pass
 
 
 class ValidationError(UFCScraperError):
-    """Raised when data validation fails."""
+    """
+    Se lanza cuando la validación de datos falla.
+    Permite identificar registros o estructuras inválidas en el flujo ETL.
+    """
     pass
 
 
 class ConfigurationError(UFCScraperError):
-    """Raised when configuration is invalid."""
+    """
+    Se lanza cuando la configuración del sistema es inválida o está incompleta.
+    """
     pass

@@ -1,4 +1,7 @@
-"""Sample data for testing."""
+"""
+Datos de ejemplo para pruebas unitarias e integración en el pipeline UFC ETL.
+Incluyen HTML simulado para luchadores, eventos y detalles de peleas, facilitando pruebas sin depender de datos reales.
+"""
 
 SAMPLE_FIGHTER_HTML = """
 <table class="b-statistics__table">
